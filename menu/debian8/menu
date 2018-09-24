@@ -1,0 +1,86 @@
+#!/bin/bash
+# Modified by kunphiphit
+if [[ -e /etc/debian_version ]]; then
+    OS=debian
+    RCLOCAL='/etc/rc.local'
+  else
+        echo -e "\e[33;1m IT LOOKS LIKE YOU ARE NOT RUNNING THIS INSTALLER ON DEBIAN, UBUNTU \e[0m"
+        exit
+fi
+cname=$( awk -F: '/model name/ {name=$2} END {print name}' /proc/cpuinfo )
+cores=$( awk -F: '/model name/ {core++} END {print core}' /proc/cpuinfo )
+freq=$( awk -F: ' /cpu MHz/ {freq=$2} END {print freq}' /proc/cpuinfo )
+tram=$( free -m | awk 'NR==2 {print $2}' )
+swap=$( free -m | awk 'NR==4 {print $2}' )
+up=$(uptime|awk '{ $1=$2=$(NF-6)=$(NF-5)=$(NF-4)=$(NF-3)=$(NF-2)=$(NF-1)=$NF=""; print }')
+echo -e "\e[33;1m \e[0m"
+echo -e "\e[33;1m \e[0m"
+echo -e "\e[032;1mCPU Model:\e[0m $cname"
+echo -e "\e[032;1mNumber Of Cores:\e[0m $cores"
+echo -e "\e[032;1mCPU Frequency:\e[0m $freq MHz"
+echo -e "\e[032;1mTotal Amount Of RAM:\e[0m $tram MB"
+echo -e "\e[032;1mTotal Amount Of Swap:\e[0m $swap MB"
+echo -e "\e[032;1mSystem Uptime:\e[0m $up"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m  a \e[0m: \e[33;1m เมนูทั้งหมด \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m  1 \e[0m: \e[33;1m สร้างบัญชี \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m  2 \e[0m: \e[33;1m สร้างบัญชีแบบสุ่ม \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m  3 \e[0m: \e[33;1m สร้างบัญชีทดลองใช้ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m  4 \e[0m: \e[33;1m ต่ออายุบัญชี \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m  5 \e[0m: \e[33;1m เปลี่ยนรหัสผ่านบัญชี \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m  6 \e[0m: \e[33;1m แบนบัญชีผู้ใช้ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m  7 \e[0m: \e[33;1m ปลดล็อคบัญชีผู้ใช้ที่ถูกแบน\e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m  8 \e[0m: \e[33;1m ล็อคบัญชีผู้ใช้ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m  9 \e[0m: \e[33;1m ปลดล็อกบัญชีผู้ใช้ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 10 \e[0m: \e[33;1m ลบบัญชีผู้ใช้ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 11 \e[0m: \e[33;1m รายละเอียดบัญชี \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 12 \e[0m: \e[33;1m แสดงรายการผู้ใช้ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 13 \e[0m: \e[33;1m ตรวจสอบการเข้าสู่ระบบ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 14 \e[0m: \e[33;1m ตรวจสอบล็อกอิน \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 15 \e[0m: \e[33;1m ตัดเซสชั่นการเข้าสู่ระบบเกิน \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 16 \e[0m: \e[33;1m แสดงบัญชีผู้ใช้ที่หมดอายุแล้วทั้งหมด \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 17 \e[0m: \e[33;1m ตรวจสอบบัญชีผู้ใช้ที่หมดอายุ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 18 \e[0m: \e[33;1m ลบบัญชีผู้ใช้ที่หมดอายุแล้ว \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 19 \e[0m: \e[33;1m ล็อคบัญชีผู้ใช้ที่หมดอายุแล้ว \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 20 \e[0m: \e[33;1m ตรวจสอบบัญชีผู้ใช้ที่ถูกล็อก \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 21 \e[0m: \e[33;1m ตรวจสอบบัญชีผู้ใช้ที่ถูกแบน \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 22 \e[0m: \e[33;1m ตรวจสอบความเร็วเซิร์ฟเวอร์ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 23 \e[0m: \e[33;1m รายละเอียดของระบบ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 24 \e[0m: \e[33;1m ตรวจสอบการใช้ RAM \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 25 \e[0m: \e[33;1m แก้ไขพอร์ตเซิร์ฟเวอร์ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 26 \e[0m: \e[33;1m ตั้งค่ารีบูตอัตโนมัติ \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 27 \e[0m: \e[33;1m ดูบันทึกการติดตั้ง \e[0m"
+echo -e "\e[31;1m\e[0m"
+echo -e "\e[031;1m\e[0m\e[32;1m 28 \e[0m: \e[33;1m ตรวจสอบและแก้ใข VPS \e[0m"
+
+
+
+
+	

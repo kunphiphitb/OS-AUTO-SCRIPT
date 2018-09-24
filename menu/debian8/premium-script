@@ -1,0 +1,175 @@
+#!/bin/bash
+# Modified by kunphiphit
+# menu
+
+if [[ -e /etc/debian_version ]]; then
+	OS=debian
+	RCLOCAL='/etc/rc.local'
+elif [[ -e /etc/centos-release || -e /etc/redhat-release ]]; then
+	OS=centos
+	RCLOCAL='/etc/rc.d/rc.local'
+	chmod +x /etc/rc.d/rc.local
+else
+	echo "คุณไม่ได้ใช้งานระบบ Debian, Ubuntu"
+	exit
+fi
+color1='\e[031;1m'
+color2='\e[34;1m'
+color3='\e[0m'
+echo "--------------- ยินดีต้อนรับสู่เมนูพรีเมี่ยมสคริปต์ ---------------"
+	echo " "
+	cname=$( awk -F: '/model name/ {name=$2} END {print name}' /proc/cpuinfo )
+	cores=$( awk -F: '/model name/ {core++} END {print core}' /proc/cpuinfo )
+	freq=$( awk -F: ' /cpu MHz/ {freq=$2} END {print freq}' /proc/cpuinfo )
+	tram=$( free -m | awk 'NR==2 {print $2}' )
+	swap=$( free -m | awk 'NR==4 {print $2}' )
+	up=$(uptime|awk '{ $1=$2=$(NF-6)=$(NF-5)=$(NF-4)=$(NF-3)=$(NF-2)=$(NF-1)=$NF=""; print }')
+
+	echo -e "\e[032;1mรุ่น CPU:\e[0m $cname"
+	echo -e "\e[032;1mจำนวนแกน:\e[0m $cores"
+	echo -e "\e[032;1mความถี่ของ CPU:\e[0m $freq MHz"
+	echo -e "\e[032;1mจำนวน RAM ทั้งหมด:\e[0m $tram MB"
+	echo -e "\e[032;1mยอดรวม Swap:\e[0m $swap MB"
+	echo -e "\e[032;1mเวลาทำงานของระบบ:\e[0m $up"
+	echo -e "-----------------------------------------------------"
+	echo ""
+	echo -e "-----=[ ส่วน SSH & OpenVPN ]=-----"
+    echo ""
+	echo -e "${color1}1${color3}.สร้างบัญชีผู้ใช้ (${color2}user-add${color3})"
+	echo -e "${color1}2${color3}.สร้างบัญชีแบบสุ่ม (${color2}user-generate${color3})"
+	echo -e "${color1}3${color3}.สร้างบัญชีทดลองใช้ (${color2}trial${color3})"
+	echo -e "${color1}4${color3}.บัญชี SSH และ OpenVPN ที่ใช้งานอยู่ (${color2}user-active${color3})"
+	echo -e "${color1}5${color3}.เปลี่ยนรหัสผ่านบัญชีผู้ใช้ (${color2}user-password${color3})"
+	echo -e "${color1}6${color3}.แบนผู้ใช้เข้าสู่ระบบแบบ Multi (${color2}user-ban${color3})"
+	echo -e "${color1}7${color3}.ปลดล็อคบัญชีผู้ใช้ที่ถูกแบน (${color2}user-unban${color3})"
+	echo -e "${color1}8${color3}.ล็อกบัญชีผู้ใช้ (${color2}user-lock${color3})"
+	echo -e "${color1}9${color3}.ปลดล็อคบัญชีผู้ใช้ (${color2}user-unlock${color3})"
+	echo -e "${color1}10${color3}.ลบบัญชีผู้ใช้ (${color2}user-delete${color3})"
+	echo -e "${color1}11${color3}.รายละเอียดบัญชีผู้ใช้ (${color2}user-detail${color3})"
+	echo -e "${color1}12${color3}.แสดงรายการบัญชีผู้ใช้ทั้งหมด (${color2}user-list${color3})"
+	echo -e "${color1}13${color3}.ตรวจสอบการเข้าสู่ระบบบัญชี (${color2}user-login${color3})"
+	echo -e "${color1}14${color3}.ตรวจสอบการล็อกอินเข้าสู่ระบบ Dropbear & OpenSSH (${color2}user-log${color3})"
+	echo -e "${color1}15${color3}.ยกเลิกการเข้าสู่ระบบแบบ Multi (${color2}user-limit${color3})"
+	echo -e "${color1}16${color3}.แสดงบัญชีผู้ใช้ที่หมดอายุแล้วเกือบทั้งหมด (${color2}infouser${color3})"
+	echo -e "${color1}17${color3}.ตรวจสอบบัญชีผู้ใช้ที่หมดอายุ (${color2}expireduser${color3})"
+	echo -e "${color1}18${color3}.ลบบัญชีผู้ใช้ที่หมดอายุแล้ว (${color2}user-delete-expired${color3})"
+	echo -e "${color1}19${color3}.Lock บัญชีผู้ใช้ที่หมดอายุแล้ว(${color2}user-expire${color3})"
+	echo -e "${color1}20${color3}.Display บัญชีผู้ใช้ที่ถูกล็อก  (${color2}log-limit${color3})"
+	echo -e "${color1}21${color3}.ตรวจสอบบัญชีผู้ใช้ที่ถูกแบน(${color2}log-ban${color3})"
+	echo -e " "
+	echo -e "-----=[ VPS Section ]=-----"
+    echo ""
+	echo -e "${color1}22${color3}.ตรวจสอบความเร็วเซิร์ฟเวอร์ (${color2}speedtest --share${color3})"
+	echo -e "${color1}23${color3}.ตรวจสอบเซิร์ฟเวอร์ตามเกณฑ์มาตรฐาน (${color2}bench-network${color3})"
+	echo -e "${color1}24${color3}.ตรวจสอบการใช้ RAM ของเซิร์ฟเวอร์ (${color2}ram${color3})"
+if [[ "$OS" = 'debian' ]]; then
+	echo -e "${color1}25${color3}.รีสตาร์ท OpenSSH ใหม่ (${color2}service ssh restart${color3})"
+	echo -e "${color1}26${color3}.รีสตาร์ท Dropbear ใหม่ (${color2}service dropbear restart${color3})"
+	echo -e "${color1}27${color3}.รีสตาร์ท OpenVPN ใหม่ (${color2}service openvpn restart${color3})"
+	echo -e "${color1}28${color3}.รีสตาร์ท Webmin (${color2}service webmin restart${color3})"
+	echo -e "${color1}29${color3}.รีสตาร์ท Proxy (${color2}service squid3 restart${color3})"
+else
+	echo -e "${color1}25${color3}.รีสตาร์ท OpenSSH (${color2}service sshd restart${color3})"
+	echo -e "${color1}26${color3}.รีสตาร์ท Dropbear (${color2}service dropbear restart${color3})"
+	echo -e "${color1}27${color3}.รีสตาร์ท OpenVPN (${color2}service openvpn restart${color3})"
+	echo -e "${color1}28${color3}.รีสตาร์ท Webmin (${color2}service webmin restart${color3})"
+	echo -e "${color1}29${color3}.รีสตาร์ท Proxy (${color2}service squid restart${color3})"
+fi
+echo -e "${color1}30${color3}.แก้ไขพอร์ตเซิร์ฟเวอร์ (${color2}edit-port${color3})"
+echo -e "${color1}31${color3}.ตั้งค่าการรีบูตอัตโนมัติ (${color2}auto-reboot${color3})"
+echo -e "${color1}32${color3}.รีสตาร์ท VPS(${color2}reboot${color3})"
+echo -e "${color1}33${color3}.เปลี่ยนรหัสผ่านเซิร์ฟเวอร์ (${color2}passwd${color3})"
+echo -e " "
+echo -e "-----=[ Others ]=-----"
+echo ""
+echo -e "${color1}34${color3}.ดูบันทึกการติดตั้ง (${color2}log-install${color3})"
+echo -e "${color1}35${color3}.การวินิจฉัย VPS (${color2}diagnostics${color3})"
+echo "-------------------------------------------"
+read -p "เลือกตัวเลือกจาก (1-35): " x
+if test $x -eq 1; then
+user-add
+elif test $x -eq 2; then
+user-generate
+elif test $x -eq 3; then
+trial
+elif test $x -eq 4; then
+user-active
+elif test $x -eq 5; then
+user-password
+elif test $x -eq 6; then
+read -p "เลือกเข้าสู่ระบบสูงสุด (1-2): " MULTILOGIN
+user-ban $MULTILOGIN
+elif test $x -eq 7; then
+user-unban
+elif test $x -eq 8; then
+user-lock
+elif test $x -eq 9; then
+user-unlock
+elif test $x -eq 10; then
+user-delete
+elif test $x -eq 11; then
+user-detail
+elif test $x -eq 12; then
+user-list
+elif test $x -eq 13; then
+user-login
+elif test $x -eq 14; then
+user-log
+elif test $x -eq 15; then
+read -p "เลือกเข้าสู่ระบบสูงสุด (1-2): " MULTILOGIN
+user-limit $MULTILOGIN
+elif test $x -eq 16; then
+infouser
+elif test $x -eq 17; then
+expireduser
+elif test $x -eq 18; then
+user-delete-expired
+elif test $x -eq 19; then
+clear
+echo "สคริปต์นี้จะทำงานโดยอัตโนมัติทุกๆ 12 ชั่วโมง"
+echo "คุณไม่จำเป็นต้องเรียกใช้ด้วยตนเอง"
+echo "หากคุณยังต้องการเรียกใช้สคริปต์นี้, พิมพ์ user-expire"
+elif test $x -eq 20; then
+log-limit
+elif test $x -eq 21; then
+log-ban
+elif test $x -eq 22; then
+speedtest --share
+elif test $x -eq 23; then
+bench-network
+elif test $x -eq 24; then
+ram
+elif test $x -eq 25; then
+	if [[ "$OS" = 'debian' ]]; then
+		service ssh restart
+	else
+		service sshd restart
+	fi
+elif test $x -eq 26; then
+service dropbear restart
+elif test $x -eq 27; then
+service openvpn restart
+elif test $x -eq 28; then
+service webmin restart
+elif test $x -eq 29; then
+	if [[ "$OS" = 'debian' ]]; then
+		service squid3 restart
+	else
+		service squid restart
+	fi
+elif test $x -eq 30; then
+edit-port
+elif test $x -eq 31; then
+auto-reboot
+elif test $x -eq 32; then
+reboot
+elif test $x -eq 33; then
+passwd
+elif test $x -eq 34; then
+log-install
+elif test $x -eq 35; then
+diagnostics
+else
+echo "ไม่มีตัวเลือกในเมนู"
+exit
+fi
