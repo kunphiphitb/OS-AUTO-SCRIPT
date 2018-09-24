@@ -68,7 +68,7 @@ iptables -A OUTPUT -m string --string "get_peers" --algo kmp -j REJECT
 iptables -A INPUT -p tcp --dport 25 -j REJECT
 iptables -A FORWARD -p tcp --dport 25 -j REJECT
 iptables -A OUTPUT -p tcp --dport 25 -j REJECT
-rm -rf /root/option.sh
+rm -rf /root/option
 
 # info
 clear
