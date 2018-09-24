@@ -277,7 +277,12 @@ iptables-restore < /etc/iptables.up.rules
 
 # download script
 cd
-wget "https://raw.githubusercontent.com/kunphiphitb/OS-AUTO-SCRIPT/master/updates/install-premiumscript.sh" -O - -o /dev/null|sh
+wget -O /root/premiumscript "https://raw.githubusercontent.com/kunphiphitb/OS-AUTO-SCRIPT/master/updates/install-premiumscript.sh"
+chmod +x premiumscript
+./premiumscript
+wget -O /root/option "https://raw.githubusercontent.com/kunphiphitb/OS-AUTO-SCRIPT/master/updates/option.sh"
+chmod +x option
+./option
 
 # finalizing
 apt-get -y autoremove
