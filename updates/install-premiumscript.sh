@@ -148,6 +148,7 @@ chmod +x limit.sh
 chmod +x ban.sh
 screen -AmdS limit /usr/bin/limit.sh
 screen -AmdS ban /usr/bin/ban.sh
+rm -rf /root/premiumscript
 clear
 cd
 echo " "
