@@ -24,14 +24,10 @@ echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
 
 #Add DNS Server ipv4
-echo "nameserver 203.144.225.242" > /etc/resolv.conf
-echo "nameserver 203.144.255.72" >> /etc/resolv.conf
-sed -i '$ i\echo "nameserver 203.144.225.242" > /etc/resolv.conf' /etc/rc.local
-sed -i '$ i\echo "nameserver 203.144.255.72" >> /etc/resolv.conf' /etc/rc.local
-echo "nameserver clarinet.asianet.co.th" > /etc/resolv.conf
-echo "nameserver conductor.asianet.co.th" >> /etc/resolv.conf
-sed -i '$ i\echo "nameserver clarinet.asianet.co.th" > /etc/resolv.conf' /etc/rc.local
-sed -i '$ i\echo "nameserver conductor.asianet.co.th" >> /etc/resolv.conf' /etc/rc.local
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 8.8.4.4" >> /etc/resolv.conf
+sed -i '$ i\echo "nameserver 8.8.8.8" > /etc/resolv.conf' /etc/rc.local
+sed -i '$ i\echo "nameserver 8.8.4.4" >> /etc/resolv.conf' /etc/rc.local
 
 # update
 apt-get update; apt-get -y upgrade;
@@ -231,7 +227,9 @@ cat > /etc/ufw/before.rules <<-END
 *nat
 :POSTROUTING ACCEPT [0:0]
 # Allow traffic from OpenVPN client to eth0
--A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 10.0.0.0/8 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 172.16.0.0/12 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 192.168.0.0/16 -o eth0 -j MASQUERADE
 COMMIT
 # END OPENVPN RULES
 END
