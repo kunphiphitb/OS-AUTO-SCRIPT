@@ -1,6 +1,9 @@
 # !/bin/bash
 #
 
+# update
+apt-get update; apt-get -y upgrade;
+
 #Requirement
 if [ ! -e /usr/bin/curl ]; then
     apt-get -y update && apt-get -y upgrade
